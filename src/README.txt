@@ -1,4 +1,13 @@
-<!-- 
+Copy Contact Roles Install Instructions
+-------------------------------------------
+1. This application is for copying the Account Contact Roles to Opportunity Contact Roles.
+2. After installation of the application,
+add the "Copy Account Contact Roles" button to the Opportunity layout.
+3. When you use this button, you can choose which Account Contact Roles to
+copy over.
+
+
+/*
 Copyright (c) 2011, salesforce.com, Inc.
 All rights reserved.
 
@@ -24,25 +33,5 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
 OF THE POSSIBILITY OF SUCH DAMAGE.
--->
-<apex:page standardController="Opportunity" extensions="CopyAccountRolesController" >
- <apex:sectionHeader title="Copy Account Contact Roles" subtitle="" />
- <apex:form >
 
- <apex:pageBlock title="Copy Account Contact Roles to Opportunity Contact Roles" mode="edit" >
-  <apex:messages />
- <apex:outputText rendered="{!isEditable}">This will copy these Account Contact Roles from {!acc.Name} to the Opportunity Contact Roles of {!opp.Name}.</apex:outputText>
- <apex:pageBlockTable value="{!accRoles}" var="accRole" rendered="{!isEditable}">
- 		<apex:column width="25" headerValue=" ">
- 		<apex:inputCheckbox value="{!accRole.isPrimary}" />
- 		</apex:column>
-         <apex:column value="{!accRole.ContactId}"/>  
-         <apex:column value="{!accRole.Role}"/>
- </apex:pageBlockTable>
-            <apex:pageBlockButtons location="bottom">   
-                <apex:commandButton value="Save" action="{!save}" rendered="{!isEditable}" />
-                <apex:commandButton value="Cancel" action="{!cancel}"/>
-            </apex:pageBlockButtons>
- </apex:pageBlock> 
- </apex:form>
-</apex:page>
+*/

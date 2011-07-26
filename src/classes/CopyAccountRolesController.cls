@@ -31,6 +31,7 @@ public Opportunity opp {get;set;}
 public Account acc {get;set;}
 public List<AccountContactRole> accRoles {get;set;}
 public Boolean isEditable {get;set;}
+public Set<Id> primaryACRS {get;set;}
  
 public CopyAccountRolesController(ApexPages.StandardController controller){
   isEditable = false;
@@ -45,7 +46,16 @@ public CopyAccountRolesController(ApexPages.StandardController controller){
   }
   
   acc = [Select Name, Id From Account where Id=:opp.AccountId];
-  accRoles = [Select AccountId, ContactId, Contact.FirstName, Contact.LastName, isPrimary, Role, Id From AccountContactRole where AccountId=:opp.AccountId];
+  accRoles = [Select AccountId, ContactId, Contact.FirstName, Contact.LastName, isDeleted, isPrimary, Role, Id From AccountContactRole where AccountId=:opp.AccountId];
+  primaryAcrs = new Set<Id>();
+  for (AccountContactRole acr : accRoles)
+  {
+  	if (acr.IsPrimary == true)
+  	{
+  		primaryAcrs.add(acr.Id);
+  	}
+  	acr.IsPrimary = true;
+  }
 
   if (accRoles.size() == 0)
   {
@@ -62,14 +72,23 @@ public PageReference save()
 	OpportunityContactRole oppRole = new OpportunityContactRole();
 	for (AccountContactRole accRole : accRoles)
 	{
-		oppRole = new OpportunityContactRole();
-		oppRole.ContactId = accRole.ContactId;
-		oppRole.OpportunityId = opp.Id;
-		oppRole.isPrimary = accRole.isPrimary;
-		oppRole.Role = accRole.Role;
-		oppRoles.add(oppRole);
+		if (accRole.isPrimary == true)
+		{
+			oppRole = new OpportunityContactRole();
+			oppRole.ContactId = accRole.ContactId;
+			oppRole.OpportunityId = opp.Id;
+			if (primaryACRs.contains(accRole.Id))
+			{
+				oppRole.isPrimary = accRole.isPrimary;
+			}
+			oppRole.Role = accRole.Role;
+			oppRoles.add(oppRole);
+		}
 	}
-	insert oppRoles;
+	if (oppRoles.size() > 0)
+	{
+		insert oppRoles;
+	}
 	return cancel();
 }
 
